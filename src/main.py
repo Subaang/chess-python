@@ -17,7 +17,7 @@ while True:
     move = input(">")
 
     # checks if input is in correct format
-    if validators.validate(move, turn, alive_pieces) is False:
+    if validators.validate(move, turn, alive_pieces, white_king, black_king) is False:
         print("invalid")
         continue
 

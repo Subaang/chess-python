@@ -29,7 +29,7 @@ def initialize_board():
     board.board[7][5] = Bishop("w", 7, 5)
 
     board.board[0][3] = Queen("b", 0, 3)
-    board.board[7][3] = Queen("b", 7, 3)
+    board.board[7][3] = Queen("w", 7, 3)
 
     board.board[7][4] = King("w", 7, 4)
     board.board[0][4] = King("b", 0, 4)

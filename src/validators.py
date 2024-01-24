@@ -57,19 +57,21 @@ def turn_validator(move, turn):
     return True
 
 
-def king_validator(move, turn, alive_pieces):
+def king_validator(move, turn, alive_pieces, white_king, black_king):
     cart_origin = misc.chess_to_cart(move[0], move[1])
     cart_destination = misc.chess_to_cart(move[3], move[4])
     enemy_piece_list = []
     checked_squares = []
 
-    # Temporarily removing the king so that he can't block his own checked squares
-    king_piece = board.board[cart_origin[0]][cart_origin[1]]
-    board.board[cart_origin[0]][cart_origin[1]] = "__"
+    if turn == 0:
+        king_piece = white_king
+    else:
+        king_piece = black_king
 
-    king_color = "w"
-    if turn == 1:
-        king_color = "b"
+    king_color = king_piece.color
+
+    # Temporarily removing the king so that he can't block his own checked squares
+    board.board[king_piece.row][king_piece.col] = "__"
 
     if turn == 0:
         for i in alive_pieces:
@@ -77,7 +79,6 @@ def king_validator(move, turn, alive_pieces):
                 enemy_piece_list.append(i)
     else:
         for i in alive_pieces:
-
             if i.name[0] == "w":
                 enemy_piece_list.append(i)
 
@@ -90,9 +91,9 @@ def king_validator(move, turn, alive_pieces):
             pawn.generate_pawn_attack_squares(i, valid_moves, king_color)
             checked_squares += valid_moves
 
-    board.board[cart_origin[0]][cart_origin[1]] = king_piece
+    board.board[king_piece.row][king_piece.col] = king_piece
 
-    if cart_destination in checked_squares:
+    if (king_piece.row, king_piece.col) in checked_squares:
         return False
 
     return True
@@ -167,20 +168,25 @@ def mate(white_king, black_king, alive_pieces):
             print("Stalemate!")
 
 
-def validate(move, turn, alive_pieces):
+def validate(move, turn, alive_pieces, white_king, black_king):
     if input_validator(move) is False:
+        print("1")
         return False
 
     if origin_validator(move) is False:
+        print("2")
         return False
 
     if turn_validator(move, turn) is False:
+        print("3")
         return False
 
     if move_validator(move, turn) is False:
+        print("4")
         return False
 
-    if king_validator(move, turn, alive_pieces) is False:
+    if king_validator(move, turn, alive_pieces, white_king, black_king) is False:
+        print("5")
         return False
 
     return True
