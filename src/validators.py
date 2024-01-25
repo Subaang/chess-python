@@ -128,6 +128,8 @@ def mate(white_king, black_king, alive_pieces):
                 if i.name[0] == "w":
                     enemy_piece_list.append(i)
 
+        friendly_pieces = [i for i in alive_pieces if i not in enemy_piece_list]
+
         for i in enemy_piece_list:
             if i.name[1] != "p":
                 checked_squares += pieces.generate_valid_moves(i, misc.change_turn(turn))
@@ -161,11 +163,24 @@ def mate(white_king, black_king, alive_pieces):
         if len(valid_king_moves) == 0 and in_check:
             if turn == 0:
                 print("Checkmate! Black wins")
+                exit()
             else:
                 print("Checkmate! White wins")
+                exit()
 
         if len(valid_king_moves) == 0 and not in_check:
-            print("Stalemate!")
+            for i in friendly_pieces:
+                if i.name[1] != "p":
+                    if len(pieces.generate_valid_moves(i, turn)) != 0:
+                        break
+                else:
+                    valid_moves = []
+                    pawn.generate_pawn_attack_squares(i, valid_moves, enemy_color)
+                    if len(valid_moves) != 0:
+                        break
+            else:
+                print("Stalemate!")
+                exit()
 
 
 def validate(move, turn, alive_pieces, white_king, black_king):
